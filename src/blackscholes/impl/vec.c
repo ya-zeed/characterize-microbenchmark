@@ -16,7 +16,6 @@
 #include "common/macros.h"
 #include "common/types.h"
 #include "common/vmath.h"
-#include "common/neon_mathfun.h"
 
 /* Include application-specific headers */
 #include "include/types.h"
@@ -32,7 +31,7 @@ float32x4_t CNDF(float32x4_t InputX) {
     float32x4_t xK2, xK2_2, xK2_3, xK2_4, xK2_5;
     float32x4_t xLocal, xLocal_1, xLocal_2, xLocal_3;
 
-    float32x4_t vNPrimeofX = exp_ps(
+    float32x4_t vNPrimeofX = vexp_f32(
             vmulq_f32(
                     vdupq_n_f32(-0.5),
                     vmulq_f32(vInputX, vInputX)
@@ -73,7 +72,7 @@ blackScholes(float32x4_t vSptPrice, float32x4_t vStrike,
              float32x4_t vOtime, uint32x4_t vOType) {
 
     float32x4_t vSqrtTime = vsqrtq_f32(vOtime);
-    float32x4_t vLogTerm = log_ps(
+    float32x4_t vLogTerm = vlog_f32(
             vdivq_f32(vSptPrice, vStrike)
     );
 
@@ -93,7 +92,7 @@ blackScholes(float32x4_t vSptPrice, float32x4_t vStrike,
 
     float32x4_t vFutureValueX = vmulq_f32(
             vStrike,
-            exp_ps(
+            vexp_f32(
                     vmulq_f32(
                             vmulq_f32(vdupq_n_f32(-1), vRate),
                             vOtime
